@@ -17,6 +17,10 @@ main() {
   if [[ "$DRY_RUN" = "True" ]]; then
     echo "DRY_RUN - exec /usr/bin/supervisord -c /usr/local/etc/supervisord.conf"
   else
+    # TODO - This is a temp fix for the permissions issue, fix with a real solution
+    chown -R palworld:palworld /palworld/server
+    chmod -R 755 /palworld/server
+
     trap 'cleanup' SIGTERM
     /usr/bin/supervisord -c /usr/local/etc/supervisord.conf &
     wait $!

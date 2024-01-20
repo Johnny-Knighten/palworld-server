@@ -33,6 +33,7 @@ download_and_update_palworld() {
   if [[ "$DRY_RUN" = "True" ]]; then
     echo "$DRY_RUN_MSG /home/steam/steamcmd/steamcmd.sh +login anonymous \"$install_dir\" \"$app_update\" +quit"
   else
+    
     /home/steam/steamcmd/steamcmd.sh +login anonymous "$install_dir" "$app_update" +quit
   fi
 }

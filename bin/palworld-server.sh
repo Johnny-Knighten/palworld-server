@@ -16,7 +16,25 @@ main() {
 
 start_server() {
   echo "Palworld Server - Starting server..."
-  ./PalServer.sh
+
+  local public_flags=""
+
+  if [[ "$PUBLIC_SERVER" = "True" ]]; then
+    public_flags+="EpicApp=PalServer -publicport=$GAME_PORT"
+  fi
+
+  if [[ -n $PUBLIC_PORT ]];then
+      public_flags+=" -publicport=$PUBLIC_PORT"
+  fi
+
+  local thread_flags=""
+
+  if [[ "$MULTITHREADING" = "True"  ]];then
+      thread_flags+="-useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS"
+  fi
+
+  echo ./PalServer.sh players="$PLAYER_COUNT" port="$GAME_PORT" "$public_flags" "$thread_flags" "$EXTRA_LAUNCH_OPTIONS"
+  ./PalServer.sh players="$PLAYER_COUNT" port="$GAME_PORT" "$public_flags" "$thread_flags" "$EXTRA_LAUNCH_OPTIONS"
 }
 
 cleanup() {

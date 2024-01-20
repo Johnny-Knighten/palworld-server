@@ -10,7 +10,13 @@ ENV DEBUG=False \
     TZ=America/New_York \
     SERVER_DIR="/palworld/server" \
     LOGS_DIR="/palworld/logs" \
-    SKIP_FILE_VALIDATION=False
+    SKIP_FILE_VALIDATION=False \
+    PUBLIC_SERVER=True \
+    PUBLIC_IP= \
+    GAME_PORT=8211 \
+    PLAYER_COUNT=32 \
+    MULTITHREADING=True \
+    EXTRA_LAUNCH_OPTIONS=
 
 RUN set -x && \
     apt-get update && \
@@ -33,5 +39,4 @@ WORKDIR ${SERVER_DIR}
 EXPOSE 8211/udp
 
 ENTRYPOINT ["/usr/local/bin/system-bootstrap.sh"]
-# ENTRYPOINT [ "" ]
 CMD [""]
