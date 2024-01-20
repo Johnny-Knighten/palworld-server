@@ -30,11 +30,13 @@ RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
                         supervisor \
-                        cron && \
+                        cron \
+                        tzdata && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g "$PGID" -o palworld && \
-    useradd -l -g "$PGID" -u "$PUID" -o --create-home palworld
+    useradd -l -g "$PGID" -u "$PUID" -o --create-home palworld && \
+    usermod -a -G crontab palworld
 
 COPY bin/ /usr/local/bin
 COPY palworldsettings_from_env_vars/ /usr/local/bin/palworldsettings_from_env_vars
