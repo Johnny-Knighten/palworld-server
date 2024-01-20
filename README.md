@@ -30,7 +30,17 @@ $ docker run -d \
   -v $HOME/palworld/server:/ark-server/server \
   -v $HOME/palworld/logs:/ark-server/logs \
   -v $HOME/palworld/backups:/ark-server/backups \
-  johnnyknighten/palword-server:latest
+  johnnyknighten/palworld-server:latest
 ```
 
 ### Windows Host
+
+
+## Build Image
+
+For development purposes, you can build the image locally.
+
+```bash
+$ docker build -t johnnyknighten/palworld-server:<TAG_NAME> .
+```
+
