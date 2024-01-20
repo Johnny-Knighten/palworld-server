@@ -2,7 +2,7 @@
 
 This script is used the generate the `PalWorldSettings.ini` config file from environment variables. More specifically it takes all environment variables prefixed with `PALWORLD_` and places them inside the `/Script/Pal.PalGameWorldSettings` section of `PalWorldSettings.ini` and saves them under the `OptionSettings` variable as comma separated values.
 
-The developers of Palworld decided to shove all server settings into a single variable that are comma separated files. It makes zero sense they are already using a ini file, but it is what it is. This script is forked from the one contained in my [`Ark Surival Ascended Docker Container`](https://github.com/Johnny-Knighten/ark-sa-server).
+The developers of Palworld decided to shove all server settings into a single variable that are comma separated variable names and values. It makes zero sense, they are already using a ini file, but it is what it is. This script is forked from the one contained in my [`Ark Survival Ascended Docker Container`](https://github.com/Johnny-Knighten/ark-sa-server).
 
 ## Usage
 
