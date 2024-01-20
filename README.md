@@ -27,6 +27,7 @@ The Palwolrd server data in this example will be stored in your home directory (
 # may require Sudo depending on your docker setup
 $ docker run -d \
   --name palworld-server \
+  -p 8211:8211/udp \
   -v $HOME/palworld/server:/ark-server/server \
   -v $HOME/palworld/logs:/ark-server/logs \
   -v $HOME/palworld/backups:/ark-server/backups \
@@ -41,6 +42,6 @@ $ docker run -d \
 For development purposes, you can build the image locally.
 
 ```bash
-$ docker build -t johnnyknighten/palworld-server:<TAG_NAME> .
+$ docker build -t johnnyknighten/palworld-server:dev --build-arg PUID=1000 --build-arg PGID=1000 .
 ```
 

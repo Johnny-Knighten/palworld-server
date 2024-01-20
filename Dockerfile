@@ -1,4 +1,4 @@
-FROM steamcmd/steamcmd:ubuntu-22
+FROM cm2network/steamcmd:root
 
 LABEL maintainer="https://github.com/Johnny-Knighten"
 
@@ -15,7 +15,7 @@ ENV DEBUG=False \
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
-                        supervisor=4.2.1-1ubuntu1 &&\
+                        supervisor && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g "$PGID" -o palworld && \
@@ -30,6 +30,8 @@ VOLUME [ "${LOGS_DIR}" ]
 
 WORKDIR ${SERVER_DIR}
 
+EXPOSE 8211/udp
 
-ENTRYPOINT ["/usr/local/bin/palworld-updater.sh"]
-CMD []
+ENTRYPOINT ["/usr/local/bin/system-bootstrap.sh"]
+# ENTRYPOINT [ "" ]
+CMD [""]
