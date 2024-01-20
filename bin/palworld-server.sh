@@ -23,8 +23,8 @@ start_server() {
     public_flags+="EpicApp=PalServer -publicport=$GAME_PORT"
   fi
 
-  if [[ -n $PUBLIC_PORT ]];then
-      public_flags+=" -publicport=$PUBLIC_PORT"
+  if [[ -n $PUBLIC_IP ]];then
+      public_flags+=" -publicip=$PUBLIC_IP"
   fi
 
   local thread_flags=""
@@ -33,8 +33,8 @@ start_server() {
       thread_flags+="-useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS"
   fi
 
-  echo ./PalServer.sh players="$PLAYER_COUNT" port="$GAME_PORT" "$public_flags" "$thread_flags" "$EXTRA_LAUNCH_OPTIONS"
-  ./PalServer.sh players="$PLAYER_COUNT" port="$GAME_PORT" "$public_flags" "$thread_flags" "$EXTRA_LAUNCH_OPTIONS"
+  echo ./PalServer.sh players=$PLAYER_COUNT port=$GAME_PORT $public_flags $thread_flags $EXTRA_LAUNCH_OPTIONS
+  ./PalServer.sh players=$PLAYER_COUNT port=$GAME_PORT $public_flags $thread_flags $EXTRA_LAUNCH_OPTIONS
 }
 
 cleanup() {
