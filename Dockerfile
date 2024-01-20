@@ -2,8 +2,8 @@ FROM cm2network/steamcmd:root
 
 LABEL maintainer="https://github.com/Johnny-Knighten"
 
-ARG PGID=0 \
-    PUID=0
+ARG PGID=1000 \
+    PUID=1000
 
 ENV DEBUG=False \
     DRY_RUN=False \
@@ -29,7 +29,8 @@ ENV DEBUG=False \
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
-                        supervisor && \
+                        supervisor \
+                        cron && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g "$PGID" -o palworld && \

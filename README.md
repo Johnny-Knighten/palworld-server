@@ -237,7 +237,7 @@ There are also pre-release tags that are built from the `next` branch. These are
 For development purposes, you can build the image locally.
 
 ```bash
-$ docker build -t johnnyknighten/palworld-server:dev --build-arg PUID=1000 --build-arg PGID=1000 .
+$ docker build -t johnnyknighten/palworld-server:dev .
 ```
 
 ## Contributing
