@@ -55,6 +55,46 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v3
 
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image (From Cache)
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        load: true
+        tags: johnnyknighten/palworld-server:latest
+        cache-from: type=gha
+
+    - name: Set Execute Permission For All Test Scripts
+      run: chmod -R +x ./tests/
+
+    - name: Dependencies Tests
+      run: |
+        ./tests/dependencies.sh
+
+    - name: Bin Script - system-bootstrap Tests
+      run: |
+        ./tests/bin_scripts/system-bootstrap.sh
+
+    - name: Bin Script - palworld-boostrap Tests
+      run: |
+        ./tests/bin_scripts/palworld-bootstrap.sh
+
+    - name: Bin Script - palworld-updater Tests
+      run: |
+        ./tests/bin_scripts/palworld-updater.sh
+
+    - name: Bin Script - palworld-server Tests
+      run: |
+        ./tests/bin_scripts/palworld-server.sh
+
+    - name: Bin Script - palworld-backup Tests
+      run: |
+        ./tests/bin_scripts/palworld-backup.sh
+
     - name: Ensure Python 3.10 Is Installed For Unit Testing of palworldsettings_from_env_vars
       uses: actions/setup-python@v4
       with:
