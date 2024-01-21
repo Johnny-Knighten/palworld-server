@@ -10,6 +10,7 @@ ENV DEBUG=False \
     TZ=America/New_York \
     SERVER_DIR="/palworld/server" \
     LOGS_DIR="/palworld/logs" \
+    BACKUPS_DIR="/palworld/backups" \
     SKIP_FILE_VALIDATION=False \
     PUBLIC_SERVER=True \
     PUBLIC_IP= \
@@ -24,14 +25,19 @@ ENV DEBUG=False \
     ADMIN_PASSWORD=adminpassword \
     RCON_ENABLED=True \
     RCON_PORT=25575 \
-    SERVER_DESCRIPTION="A Containerized Palworld Server"
+    SERVER_DESCRIPTION="A Containerized Palworld Server" \
+    BACKUP_ON_STOP=True \
+    ZIP_BACKUPS=False \
+    RETAIN_BACKUPS=
 
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
                         supervisor \
                         cron \
-                        tzdata && \
+                        tzdata \
+                        unzip \
+                        zip && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g "$PGID" -o palworld && \
@@ -45,6 +51,7 @@ RUN ["chmod", "-R", "+x", "/usr/local/bin"]
 
 VOLUME [ "${SERVER_DIR}" ]
 VOLUME [ "${LOGS_DIR}" ]
+VOLUME [ "${BACKUPS_DIR}" ]
 
 WORKDIR ${SERVER_DIR}
 
