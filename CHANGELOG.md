@@ -1,3 +1,10 @@
+## [1.0.1-next.2](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.1-next.1...1.0.1-next.2) (2024-01-21)
+
+
+### Bug Fixes
+
+* added pr and issue templates for repo ([b62257e](https://github.com/Johnny-Knighten/palworld-server/commit/b62257e9c252c03aee1f7caa26e99a0800b75476))
+
 ## [1.0.1-next.1](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.0...1.0.1-next.1) (2024-01-21)
 
 
