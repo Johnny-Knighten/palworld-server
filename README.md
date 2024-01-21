@@ -1,5 +1,18 @@
 # Palworld - Dedicated Server Docker Container
 
+[![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/Johnny-Knighten/palworld-server?logo=github)](https://github.com/Johnny-Knighten/palworld-server/releases)
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Johnny-Knighten/palworld-server/build-and-test.yml?logo=github&label=build%20and%20test%20-%20status)
+](https://github.com/Johnny-Knighten/palworld-server/actions/workflows/build-and-test.yml)
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Johnny-Knighten/palworld-server/release.yml?logo=github&label=release%20-%20status)
+](https://github.com/Johnny-Knighten/palworld-server/actions/workflows/release.yml)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Johnny-Knighten/palworld-server?logo=github)
+](https://github.com/Johnny-Knighten/palworld-server)
+[![GitHub](https://img.shields.io/github/license/Johnny-Knighten/palworld-server?logo=github)](https://github.com/Johnny-Knighten/palworld-server/blob/main/LICENSE)
+
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/johnnyknighten/palworld-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/palworld-server)
+[![Docker Stars](https://img.shields.io/docker/stars/johnnyknighten/palworld-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/palworld-server)
+[![Docker Pulls](https://img.shields.io/docker/pulls/johnnyknighten/palworld-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/palworld-server)
+
 Docker container image for running a Palworld dedicated server.
 
 
@@ -80,7 +93,7 @@ docker run -d `
   -e ADMIN_PASSWORD=secretpassword `
   -v /mnt/c/Users/USER/palworld/server:/palworld/server`
   -v /mnt/c/Users/USER/palworld/logs:/palworld/logs `
-  johnnyknighten/ark-sa-server:latest
+  johnnyknighten/palworld-server:latest
 ```
 
 To view the container logs:
