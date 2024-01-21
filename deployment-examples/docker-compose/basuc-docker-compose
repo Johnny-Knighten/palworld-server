@@ -1,0 +1,21 @@
+---
+version: '3'
+services:
+  palworld:
+    container_name: palworld
+    image: johnnyknighten/palworld-server:dev
+    restart: unless-stopped
+    environment:
+      - PUBLIC_IP="x.x.x.x"
+      - SERVER_NAME="Basic Server"
+      - RCON_ENABLED=False
+    ports:
+      - 8211:8211/udp
+    volumes:
+      - 'palworld-server:/palworld/server'
+      - 'palworld-logs:/palworld/logs'
+      - 'palworld-backups:/palworld/backups'
+volumes:
+  palworld-server:
+  palworld-logs:
+  palworld-backups:

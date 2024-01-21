@@ -15,6 +15,7 @@ Docker container image for running a Palworld dedicated server.
    - [Exposed Ports](#exposed-ports)
    - [Volumes](#volumes)
    - [Backups](#backups)
+* [Deployment](#deployment)
 * [Tags](#tags)
 * [Build Image](#build-image)
 * [Contributing](#contributing)
@@ -252,6 +253,9 @@ Backup Automation Options
 
 If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/palworld-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
 
+## Deployment
+
+See the deployment-examples directory for examples of how to deploy this container using docker-compose.
 
 ## Container Tags
 
