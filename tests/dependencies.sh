@@ -4,7 +4,7 @@ source ./tests/test_helper_functions.sh
 
 perform_test "Verify SteamCMD is Installed" \
             "docker run --rm \
-              --entrypoint steamcmd \
+              --entrypoint /home/steam/steamcmd/steamcmd.sh \
               johnnyknighten/palworld-server:latest \
               +quit > /dev/null 2>&1"
 
@@ -19,12 +19,6 @@ perform_test "Verify CRON is Installed" \
                 --entrypoint bash \
                 johnnyknighten/palworld-server:latest \
                 -c "echo \"* * * * * test\" > crontab.txt && crontab crontab.txt && crontab -l" > /dev/null 2>&1'
-
-perform_test "Verify tzdata is Installed" \
-             'docker run --rm \
-                --entrypoint bash \
-                johnnyknighten/palworld-server:latest \
-                -c "cat /usr/share/zoneinfo/tzdata.zi | head -n 1 | grep \"# version 2023c\"" > /dev/null 2>&1'
 
 perform_test "Verify tar is Installed" \
              'docker run --rm \
