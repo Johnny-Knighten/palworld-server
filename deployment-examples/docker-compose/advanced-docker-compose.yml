@@ -1,0 +1,36 @@
+---
+version: '3'
+services:
+  palworld:
+    container_name: palworld
+    image: johnnyknighten/palworld-server:dev
+    restart: unless-stopped
+    environment:
+      - PUBLIC_SERVER=True
+      - PUBLIC_IP="x.x.x.x"
+      - GAME_PORT=8215
+      - PLAYER_COUNT=16
+      - SERVER_NAME="Test123456"
+      - SERVER_PASSWORD="password"
+      - BACKUP_ON_STOP=True
+      - ZIP_BACKUPS=True
+      - RETAIN_BACKUPS=4
+      - PALWORLD_ExpRate=5.0
+      - PALWORLD_PalSpawnNumRate=2.0
+      - PALWORLD_PalDamageRateAttack=3.0
+      - SCHEDULED_RESTART=True
+      - BACKUP_ON_SCHEDULED_RESTART=True
+      - RESTART_CRON=* */6 * * *
+      - RCON_PORT=25576
+      - RCON_ENABLED=True
+    ports:
+      - 8215:8215/udp
+      - 25576:25576/tcp
+    volumes:
+      - 'palworld-server:/palworld/server'
+      - 'palworld-logs:/palworld/logs'
+      - 'palworld-backups:/palworld/backups'
+volumes:
+  palworld-server:
+  palworld-logs:
+  palworld-backups:

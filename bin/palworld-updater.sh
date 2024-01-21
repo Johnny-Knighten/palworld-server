@@ -8,8 +8,17 @@ echo "Updater - Starting"
 
 main() {
  download_and_update_palworld
+ launch_palworld_server
 }
 
+launch_palworld_server() {
+  echo " Updater - Launching Palworld Server"
+  if [[ "$DRY_RUN" = "True" ]]; then
+    echo "DRY_RUN - supervisorctl start palworld-server"
+  else
+    supervisorctl start palworld-server
+  fi
+}
 
 download_and_update_palworld() {
   if [ "$SKIP_FILE_VALIDATION" = "True" ]; then
@@ -22,9 +31,10 @@ download_and_update_palworld() {
   local install_dir="+force_install_dir $SERVER_DIR"
 
   if [[ "$DRY_RUN" = "True" ]]; then
-    echo "$DRY_RUN_MSG steamcmd +login anonymous \"$install_dir\" \"$app_update\" +quit"
+    echo "$DRY_RUN_MSG /home/steam/steamcmd/steamcmd.sh +login anonymous \"$install_dir\" \"$app_update\" +quit"
   else
-    steamcmd +login anonymous "$install_dir" "$app_update" +quit
+    
+    /home/steam/steamcmd/steamcmd.sh +login anonymous "$install_dir" "$app_update" +quit
   fi
 }
 
