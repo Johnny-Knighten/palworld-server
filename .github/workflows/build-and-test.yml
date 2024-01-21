@@ -1,0 +1,105 @@
+name: Build and Test
+run-name: Build/Test for PR #${{ github.event.number }} on ${{ github.head_ref }}
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Lint Dockerfile
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: "Dockerfile"
+        failure-threshold: error
+
+    - name: Run ShellCheck
+      uses: ludeeus/action-shellcheck@master
+      with:
+        severity: error
+        scandir: './bin'
+
+    - name: Lint Python Files Using Black
+      uses: psf/black@stable
+      with:
+        options: "--check --verbose"
+        src: "./palworldsettings_from_env_vars"
+        version: "~= 23.0"
+
+    - name: Build Docker image (Push To Cache)
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        load: true
+        tags: johnnyknighten/palworld-server:latest
+        cache-to: type=gha,mode=max
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint-and-build
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image (From Cache)
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        load: true
+        tags: johnnyknighten/palworld-server:latest
+        cache-from: type=gha
+
+    - name: Set Execute Permission For All Test Scripts
+      run: chmod -R +x ./tests/
+
+    - name: Dependencies Tests
+      run: |
+        ./tests/dependencies.sh
+
+    - name: Bin Script - system-bootstrap Tests
+      run: |
+        ./tests/bin_scripts/system-bootstrap.sh
+
+    - name: Bin Script - palworld-boostrap Tests
+      run: |
+        ./tests/bin_scripts/palworld-bootstrap.sh
+
+    - name: Bin Script - palworld-updater Tests
+      run: |
+        ./tests/bin_scripts/palworld-updater.sh
+
+    - name: Bin Script - palworld-server Tests
+      run: |
+        ./tests/bin_scripts/palworld-server.sh
+
+    - name: Bin Script - palworld-backup Tests
+      run: |
+        ./tests/bin_scripts/palworld-backup.sh
+
+    - name: Ensure Python 3.10 Is Installed For Unit Testing of palworldsettings_from_env_vars
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Unit Tests - palworldsettings_from_env_vars
+      run: |
+        python3 -m unittest tests/palworldsettings_from_env_vars/test_main.py -v
