@@ -23,6 +23,9 @@ Docker container image for running a Palworld dedicated server.
 
 * Simple automated installation of Palworld dedicated server
 * Configuration via environment variables and config files
+* Scheduled server restarts and updates via Cron
+  * Can be frozen to a specific version that is already downloaded
+* Automated backups
 * Linux Container
 
 
@@ -106,6 +109,14 @@ The table below shows all available environment variables exposed for ease of us
 | `SKIP_FILE_VALIDATION` | Skips SteamCMD validation of the server files. Can speed up server start time, but could risk not detecting corrupted files. | `False` |
 | `TZ` | Sets the timezone of the container. See the table [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and look in the TZ identifier column. Highly recommend to set this if you will be using any of the CRON variables. | `America/New_York` |
 | `MANUAL_CONFIG` | If set to `True` then the container will not auto generate `PalWorldSettings.ini` using environment variables. This is useful if you want to manage `PalWorldSettings.ini` yourself. | `False` |
+| `SCHEDULED_RESTART` | Enable scheduled restarts of the server. | `False` |
+| `BACKUP_ON_SCHEDULED_RESTART` | Determines if the server should backup itself before restarting. | `False` |
+| `RESTART_CRON` | Cron expression for scheduled restarts. Default is everyday at 4am. | `0 4 * * *` |
+| `SCHEDULED_UPDATE` | Enable scheduled updates of the server. | `False` |
+| `UPDATE_CRON` | Cron expression for scheduled updates. Default is every Sunday at 5am. | `0 5 * * 0` |
+| `BACKUP_BEFORE_UPDATE` | Determines if the server should backup itself before updating. | `False` |
+| `SCHEDULED_BACKUP` | Enable scheduled backups of the server. | `False` |
+| `BACKUP_CRON` | Cron expression for scheduled backups. Default is every day at 6am. | `0 6 * * *` |
 | `UPDATE_ON_BOOT` | Determines if the server should update itself when it starts. | `True` |
 | `BACKUP_ON_STOP` | Determines if the server should backup itself when the container stops. | `True` |
 | `ZIP_BACKUPS` | If this is set to `True` then it will zip your backups instead of the default tar and gzip. | `False` |
@@ -233,8 +244,14 @@ Backups can be performed automatically if configured. Backups are performed by m
 
 Backup Automation Options
 * `BACKUP_ON_STOP` - Backup the server when the container stops
+* `BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
+* `BACKUP_BEFORE_UPDATE` - Backup the server before an update
+* `SCHEDULED_BACKUP` - Backup the server on a schedule
 
-**If you are using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker run/stop/compose` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/palworld-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.**
+#### Tip For Using `BACKUP_ON_STOP=True`
+
+If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/palworld-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
+
 
 ## Container Tags
 

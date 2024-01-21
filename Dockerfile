@@ -28,7 +28,15 @@ ENV DEBUG=False \
     SERVER_DESCRIPTION="A Containerized Palworld Server" \
     BACKUP_ON_STOP=True \
     ZIP_BACKUPS=False \
-    RETAIN_BACKUPS=
+    RETAIN_BACKUPS= \
+    SCHEDULED_RESTART=False \
+    BACKUP_ON_SCHEDULED_RESTART=False \
+    RESTART_CRON="0 4 * * *" \
+    SCHEDULED_UPDATE=False \
+    BACKUP_BEFORE_UPDATE=False \
+    UPDATE_CRON="0 5 * * 0" \
+    SCHEDULED_BACKUP=False \
+    BACKUP_CRON="0 6 * * *" 
 
 RUN set -x && \
     apt-get update && \
