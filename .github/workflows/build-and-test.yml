@@ -34,7 +34,7 @@ jobs:
       uses: psf/black@stable
       with:
         options: "--check --verbose"
-        src: "./config_from_env_vars"
+        src: "./palworldsettings_from_env_vars"
         version: "~= 23.0"
 
     - name: Build Docker image (Push To Cache)
@@ -44,7 +44,7 @@ jobs:
         file: ./Dockerfile
         push: false
         load: true
-        tags: johnnyknighten/ark-sa-server:latest
+        tags: johnnyknighten/palworld-server:latest
         cache-to: type=gha,mode=max
 
   test:
