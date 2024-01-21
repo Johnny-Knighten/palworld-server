@@ -1,3 +1,17 @@
+## [1.0.0-next.2](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.0-next.1...1.0.0-next.2) (2024-01-21)
+
+
+### Bug Fixes
+
+* changed default port in palworld-server test ([ac9c40a](https://github.com/Johnny-Knighten/palworld-server/commit/ac9c40a421a8e36f97a3b0243ee6513e33c4de84))
+* removed tzdata test and updated steamcmd path ([c1be8d6](https://github.com/Johnny-Knighten/palworld-server/commit/c1be8d6eb18bc96bbf6a5f8d73de967be25f2258))
+* version locked dependencies in Dockerfile ([f334b5f](https://github.com/Johnny-Knighten/palworld-server/commit/f334b5f23762fad10ca149265eed7fae8ac11931))
+
+
+### Features
+
+* added core test suite ([b446917](https://github.com/Johnny-Knighten/palworld-server/commit/b4469173c7323556833016c480a44e0f99af2e96))
+
 ## [1.0.0-next.1](https://github.com/Johnny-Knighten/palworld-server/compare/...1.0.0-next.1) (2024-01-21)
 
 
