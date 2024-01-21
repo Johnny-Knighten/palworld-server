@@ -90,6 +90,7 @@ def compare_and_cleanup_configs(path: str):
 
     if not latest_backup:
         logging.info(f"No backups exist for: {path}/PalWorldSettings.ini")
+        return
 
     if Path(latest_backup).exists() and filecmp.cmp(
         f"{path}/PalWorldSettings.ini", latest_backup, shallow=False
@@ -115,9 +116,9 @@ def main():
     )
     args = parser.parse_args()
 
-    if not Path(os.path.join(args.config_path, "PalWorldSettings.ini")).exists():
+    if not Path(os.path.join(args.config_path)).exists():
         logging.error(
-            f"Could not find PalWorldSettings.ini at: {args.config_path}"
+            f"Given File Path Does Not Exist: {args.config_path}"
         )
         sys.exit(1)
 
