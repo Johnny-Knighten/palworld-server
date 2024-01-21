@@ -41,11 +41,11 @@ ENV DEBUG=False \
 RUN set -x && \
     apt-get update && \
     apt-get install --no-install-recommends -y  \
-                        supervisor \
-                        cron \
-                        tzdata \
-                        unzip \
-                        zip && \
+                        supervisor=4.2.2-2 \
+                        cron=3.0pl1-137 \
+                        tzdata=2021a-1+deb11u11 \
+                        unzip=6.0-26+deb11u1 \
+                        zip=3.0-12 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g "$PGID" -o palworld && \
