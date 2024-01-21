@@ -1,3 +1,10 @@
+## [1.0.1-next.1](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.0...1.0.1-next.1) (2024-01-21)
+
+
+### Bug Fixes
+
+* added badges to readme ([a6f9449](https://github.com/Johnny-Knighten/palworld-server/commit/a6f94496b029069ebf9365334bdd3c5bf24e2a2a))
+
 ## [1.0.0](https://github.com/Johnny-Knighten/palworld-server/compare/...1.0.0) (2024-01-21)
 
 
