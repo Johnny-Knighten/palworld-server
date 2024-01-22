@@ -3,7 +3,7 @@ version: '3'
 services:
   palworld:
     container_name: palworld
-    image: johnnyknighten/palworld-server:dev
+    image: johnnyknighten/palworld-server:latest
     restart: unless-stopped
     environment:
       - PUBLIC_IP="x.x.x.x"
