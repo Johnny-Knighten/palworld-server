@@ -65,6 +65,7 @@ WORKDIR ${SERVER_DIR}
 
 EXPOSE 8211/udp
 EXPOSE 25575/tcp
+EXPOSE 27015/udp
 
 ENTRYPOINT ["/usr/local/bin/system-bootstrap.sh"]
 CMD [""]

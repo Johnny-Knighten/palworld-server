@@ -13,8 +13,20 @@
 [![Docker Stars](https://img.shields.io/docker/stars/johnnyknighten/palworld-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/palworld-server)
 [![Docker Pulls](https://img.shields.io/docker/pulls/johnnyknighten/palworld-server?logo=docker)](https://hub.docker.com/r/johnnyknighten/palworld-server)
 
-Docker container image for running a Palworld dedicated server.
+A fully featured Docker container image for running a Palworld dedicated server. Has a robust backup system, 100% configurable via environment variables, and more.
 
+> [!Important]
+> There is a known bug with the in-game community server browser. It initially only loads 200 servers. There is a button to load another 200 servers, but I had the game crash after loading over a thousand of them. So it really is the luck of the draw if your server appears in the in-game server browser. I recommend connecting via ip:port, after connecting that way your server will be listed in the recent server list. See the Q&A section at the [official game docs](https://tech.palworldgame.com/community-server-guide) for reference to this issue.
+> The only downside is you cannot directly provide a password when joining via ip:port. Thankfully somone found a [workaround](https://steamcommunity.com/app/1623730/discussions/0/4132683013931609911/):
+> 1. Open the 'Community Servers' list
+> 2. Click on any password protected server
+> 3. Enter the password of the server you want to connect to (not the one that was clicked on)
+> 4. Click 'OK', then click 'No'.
+> 6. Enter the IP:PORT of the server you want to connect to in the bottom box.
+> 7. Click Connect
+
+> [!NOTE]
+> Palworld does not currently support crossplay with console, and there is no cross play between Steam and Xbox Game Pass versions of the game. See details [here](https://store.steampowered.com/news/app/1623730/view/3943530908925344453).
 
 # Table of Contents
 
@@ -40,8 +52,6 @@ Docker container image for running a Palworld dedicated server.
 * Scheduled server restarts and updates via Cron
   * Can be frozen to a specific version that is already downloaded
 * Automated backups
-* Linux Container
-
 
 ## Quickstart
 
@@ -57,6 +67,7 @@ $ docker run -d \
   --name palworld-server \
   -p 8211:8211/udp \
   -p 25575:25575/tcp \
+  -p 27015:27015/udp \
   -e SERVER_NAME="\"My Palworld Server\"" \
   -e ADMIN_PASSWORD=secretpassword \
   -v $HOME/palworld/server:/palworld/server \
@@ -89,6 +100,7 @@ docker run -d `
   --name palworld-server `
   -p 8211:8211/udp `
   -p 25575:25575/tcp `
+  -p 27015:27015/udp `
   -e SERVER_NAME="My Palworld Server" `
   -e ADMIN_PASSWORD=secretpassword `
   -v /mnt/c/Users/USER/palworld/server:/palworld/server`
@@ -157,8 +169,8 @@ This container has two primary ways to manage `PalWorldSettings.ini`:
 * Via `PALWORD_` Environment Variables
 * Manually Edit The File
 
-**Note - You should not mix and match these methods.**
-
+> [!CAUTION]
+> You should not mix and match these methods.
 
 #### Manual Config
 
@@ -195,6 +207,7 @@ $ docker run -d \
   --name palworld-server \
   -p 8211:8211/udp \
   -p 25575:25575/tcp \
+  -p 27015:27015/udp \
   -e PALWORLD_ExpRate=5.0 \
   -e PALWORLD_PalSpawnNumRate=2.0 \
   -e PALWORLD_PalDamageRateAttack=3.0 \
@@ -238,10 +251,15 @@ The table below shows the default ports that are exposed by the container. These
 | :---: | :---: | --- |
 | 8211 | UDP | Game port |
 | 25575 | TCP | RCON Port |
+| 27015 | UDP | Steam Query Port |
 
-Make sure you have Port Forwarding configured otherwise the server will not be accessible from the internet. 
+Currently the Steam Query Port cannot be configured for the server. This can cause complications if you are hosting other servers that need that same port forwarded (you have multiple servers needing port 27015 but you can only forward traffic to one of them). For now, if you other server can have its steam query port changed, then change it to something other than 27015. If you cannot change the steam query port of your other server, then you will not be able to host both servers on the same network.
 
-Note - Always ensure that your `-p` port mappings (if using docker run) and the `ports` section (if using docker compose) match up to the ports specified via the environment variables. If they do not match up, the server will not be accessible.
+> [!TIP]
+> Make sure you have Port Forwarding configured otherwise the server will not be accessible from the internet. 
+
+> [!TIP]
+> Note - Always ensure that your `-p` port mappings (if using docker run) and the `ports` section (if using docker compose) match up to the ports specified via the environment variables. If they do not match up, the server will not be accessible.
 
 ### Volumes
 
