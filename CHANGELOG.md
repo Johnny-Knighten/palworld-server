@@ -1,3 +1,10 @@
+## [1.0.2-next.1](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.1...1.0.2-next.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* added steam query port and updated docs ([59825f2](https://github.com/Johnny-Knighten/palworld-server/commit/59825f2a1421ff0e142ff80b48e1970853bd1703))
+
 ## [1.0.1](https://github.com/Johnny-Knighten/palworld-server/compare/1.0.0...1.0.1) (2024-01-21)
 
 
