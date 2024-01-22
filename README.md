@@ -16,8 +16,8 @@
 A fully featured Docker container image for running a Palworld dedicated server. Has a robust backup system, 100% configurable via environment variables, and more.
 
 > [!Important]
-> There is a known bug with the in-game community server browser. It initially only loads 200 servers. There is a button to load another 200 servers, but I had the game crash after loading over a thousand of them. So it really is the luck of the draw if your server appears in the in-game server browser. I recommend connecting via ip:port, after connecting that way your server will be listed in the recent server list. See the Q&A section at the [official game docs](https://tech.palworldgame.com/community-server-guide) for reference to this issue.
-> The only downside is you cannot directly provide a password when joining via ip:port. Thankfully somone found a [workaround](https://steamcommunity.com/app/1623730/discussions/0/4132683013931609911/):
+> There is a known bug with the in-game community server browser. It initially only loads 200 servers. There is a button to load another 200 servers, but I had the game crash after loading over a thousand of them. So it really is the luck of the draw if your server appears in the in-game server browser. I recommend connecting via ip:port, after connecting that way your server will be listed in the recent servers list. See the Q&A section at the [official game docs](https://tech.palworldgame.com/community-server-guide) for reference to this issue.
+> The only downside to joining via ip:port is that you cannot directly provide a password. Thankfully someone found a [workaround](https://steamcommunity.com/app/1623730/discussions/0/4132683013931609911/), here are the steps:
 > 1. Open the 'Community Servers' list
 > 2. Click on any password protected server
 > 3. Enter the password of the server you want to connect to (not the one that was clicked on)
@@ -72,6 +72,7 @@ $ docker run -d \
   -e ADMIN_PASSWORD=secretpassword \
   -v $HOME/palworld/server:/palworld/server \
   -v $HOME/palworld/logs:/palworld/logs \
+  -v $HOME/palworld/backups:/palworld/backups \
   johnnyknighten/palworld-server:latest
 ```
 
@@ -105,6 +106,7 @@ docker run -d `
   -e ADMIN_PASSWORD=secretpassword `
   -v /mnt/c/Users/USER/palworld/server:/palworld/server`
   -v /mnt/c/Users/USER/palworld/logs:/palworld/logs `
+  -v /mnt/c/Users/USER/palworld/backups:/palworld/backups `
   johnnyknighten/palworld-server:latest
 ```
 
@@ -126,9 +128,9 @@ docker stop palworld-server
 
 ### Environment Variables
 
-Environment variables are the primary way to configure the server itself.
+Environment variables are the primary way to configure the server.
 
-The table below shows all available environment variables exposed for ease of use. Variables used to directly modify `PalWorldSettings.ini` can be found in the section below.
+The table below shows all available environment variables exposed for easy configuration. Variables used to directly modify `PalWorldSettings.ini` can be found in the section below.
 
 | Variable | Description | Default |
 | --- | --- | :---: |
@@ -163,7 +165,7 @@ The table below shows all available environment variables exposed for ease of us
 
 ### Configuring `PalWorldSettings.ini` 
 
-The `PalWorldSettings.ini` file is the primary config file for the server. It is located in the `/palworld/server/Pal/Saved/Config/LinuxServer` directory inside the container. This file is generated automatically by the container using environment variables. If you wish to manage this file yourself, you must set `MANUAL_CONFIG=True` to prevent the container from generating/overwriting the file.
+The `PalWorldSettings.ini` file is the primary config file used to configure server and game play settings. It is located in the `/palworld/server/Pal/Saved/Config/LinuxServer` directory inside the container. This file is generated automatically by the container using environment variables. If you wish to manage this file yourself, you must set `MANUAL_CONFIG=True` to prevent the container from generating/overwriting the file.
 
 This container has two primary ways to manage `PalWorldSettings.ini`:
 * Via `PALWORD_` Environment Variables
@@ -213,10 +215,11 @@ $ docker run -d \
   -e PALWORLD_PalDamageRateAttack=3.0 \
   -v $HOME/palworld/server:/palworld/server \
   -v $HOME/palworld/logs:/palworld/logs \
+  -v $HOME/palworld/backups:/palworld/backups \
   johnnyknighten/palworld-server:latest
 ```
 
-Another special feature of using environment variables is that backup copies of `PalWorldSettings.ini` are made when configuration changes are detected. That is, if you make a configuration change a `PalWorldSettings.ini.backup#` file is made. The `#` is incremented for each backup made. The highest number reflects the newest backup. This is useful if you make a mistake and want to revert to a previous config.
+Another special feature of using environment variables is that backup copies of `PalWorldSettings.ini` are made when configuration changes are detected. That is, if you make a configuration change a `PalWorldSettings.ini.backup#` file is made containing the old config. The `#` is incremented for each backup made. The highest number reflects the newest backup. This is useful if you make a mistake and want to revert to a previous config.
 
 There are some overlap between some of the provided environment variables and the special `PALWORLD_` variables. For instance, `SERVER_NAME` is provided but `PALWORLD_ServerName` is also available. This container is setup to give non `PALWORLD_` priority over their `PALWORLD_` counterparts. For these specific variables **do not** use their `PALWORLD_` counterparts. Below shows the variables that have priority:
 
@@ -267,22 +270,24 @@ There are the volumes used by the container:
 
 | Volume | Description |
 | --- | --- |
-| /palworld/server | Contains server files |
-| /palworld/logs | Contains all log files generated by the container |
+| /palworld/server | Contains server files. |
+| /palworld/logs | Contains all log files generated by the container. |
+| /palworld/backups | Contains all backups generated by the container. |
 
 ### Backups
 
-Backups can be performed automatically if configured. Backups are performed by making a copy of the `/palworld/server/Pal/Saved` directory to the `/palworld/backups` volume. The backups file names use the following format: `server-backup-{datetime}`. They are compressed as `tar.gz` files by default(can be set to zip via `ZIP_BACKUPS=True`). You can configure the number of backups to keep using `RETAIN_BACKUPS`, otherwise you will need to manually delete old backups.
+Backups can be performed automatically if configured. Backups are performed by making a copy of the `/palworld/server/Pal/Saved` directory to the `/palworld/backups` volume. The backups file names use the following format: `server-backup-{datetime}`. They are compressed as `tar.gz` files by default (but can be set to zip via `ZIP_BACKUPS=True`). You can configure the number of backups to keep using `RETAIN_BACKUPS`, otherwise you will need to manually delete old backups.
 
 Backup Automation Options
 * `BACKUP_ON_STOP` - Backup the server when the container stops
-* `BACKUP_ON_SCHEDULED_RESTART` - Backup the server before a scheduled restart
+* `BACKUP_ON_SCHEDULED_RESTART` - Backup the server during a scheduled restart
 * `BACKUP_BEFORE_UPDATE` - Backup the server before an update
 * `SCHEDULED_BACKUP` - Backup the server on a schedule
 
-#### Tip For Using `BACKUP_ON_STOP=True`
 
-If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is likely your backup will be unfinished and corrupt. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/palworld-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
+> [!IMPORTANT]
+> If you are planning on using `BACKUP_ON_STOP=True`, it is highly recommended you adjust the timeout settings of your `docker stop/compose down` command to allow the backup process enough time to complete its backup. Without doing this, it is possible that your backup will be unfinished and corrupted. The longer your server has been running the bigger your backup will become which increases the time needed to backup the server. See the [Backup On Container Stop - Docker Timeout Considerations](https://github.com/Johnny-Knighten/palworld-server/wiki/Backups#backup-on-container-stop---docker-timeout-considerations) section of the wiki for more details.
+
 
 ## Deployment
 
