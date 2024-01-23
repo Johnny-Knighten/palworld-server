@@ -4,7 +4,7 @@ This README contains examples of using docker compose to launch a Palworld serve
 
 The basic-docker-compose.yml file will launch a server with minimal configuration, while advanced-docker-compose.yml will launch a server with more robust configuration.
 
-The examples that follow show basic usage of docker compose to launch and manage the ARK: Survival Ascended server container.  For more information on docker compose, please see the [docker compose documentation](https://docs.docker.com/compose/).
+The examples that follow show basic usage of docker compose to launch and manage the Palworld server container.  For more information on docker compose, please see the [docker compose documentation](https://docs.docker.com/compose/).
 
 ## Basic Example
 
@@ -89,8 +89,8 @@ You specify the environment file in the `env_file` section of your compose file:
 ```yaml
 version: '3'
 services:
-  ark-sa:
-    container_name: ark
+  palworld:
+    container_name: palworld-server
     image: johnnyknighten/palworld-server:latest
     restart: unless-stopped
     env_file: 
